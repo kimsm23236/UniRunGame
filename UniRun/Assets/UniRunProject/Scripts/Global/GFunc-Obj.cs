@@ -77,4 +77,39 @@ public static partial class GFunc
         Scene activeScene = SceneManager.GetActiveScene();
         return activeScene;
     }   // GetActiveScene()
+
+    //! 오브젝트의 로컬 포지션을 변경하는 함수
+    public static void SetLocalPosition(this GameObject obj_, float x, float y, float z)
+    {
+        obj_.transform.localPosition = new Vector3(x, y, z);
+    }
+
+    //! 오브젝트의 로컬 포지션을 연산하는 함수
+    public static void AddLocalPosition(this GameObject obj_, float x, float y, float z)
+    {
+        obj_.transform.localPosition = obj_.transform.localPosition + new Vector3(x,y,z);
+    }   // AddLocalPos()
+
+    public static void Translate(this Transform transform_, Vector2 moveVector)
+    {
+        transform_.Translate(moveVector.x, moveVector.y, 0f);
+    }   // Translate
+    // 컴포넌트 가져오는 함수
+    public static T GetComponentMust<T>(this GameObject obj)
+    {
+        T component_ = obj.GetComponent<T>();
+
+        GFunc.Assert(component_.IsValid<T>() != false, string.Format("{0}에서 {1}을(를) 찾을 수 없습니다.",
+                                                         obj.name, component_.GetType().Name));
+        //GFunc.Assert(!isComponentNull, string.Format("{0}에서 {1}을(를) 찾을 수 없습니다.",
+        //                                                 obj.name, component_.GetType().Name));
+
+        return component_;
+    }
+
+    //! RectTransform 에서 sizeDelta를 찾아서 리턴하는 함수
+    public static Vector2 GetSizeDelta(this GameObject obj_)
+    {
+        return obj_.GetComponentMust<RectTransform>().sizeDelta;
+    }
 }
