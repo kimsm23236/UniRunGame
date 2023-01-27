@@ -7,17 +7,20 @@ public class ScrollingObjController : MonoBehaviour
     public string prefabName = default;
     public float scrollingSpeed = 100.0f;
     public int scrollingObjCount = default;
-    private GameObject objPrefab = default;
+    protected GameObject objPrefab = default;
     protected Vector2 objPrefabSize = default;
 
     protected List<GameObject> scrollingPool = default;
 
     protected float lastScrObjInitPosX = default;
+    protected float prefabYPos = default;
     // Start is called before the first frame update
     public virtual void Start()
     {
         objPrefab = gameObject.FindChildObj(prefabName);
-        objPrefabSize.x = objPrefab.GetSizeDelta().x;
+        objPrefabSize = objPrefab.GetSizeDelta();
+
+        prefabYPos = objPrefab.transform.localPosition.y;
 
         scrollingPool = new List<GameObject>();
 
@@ -35,8 +38,6 @@ public class ScrollingObjController : MonoBehaviour
             }
             
         }   // if : scrolling pool 초기화
-
-        RepositionFirstObj();
         
         objPrefab.SetActive(false);
         // } 스크롤링 풀을 생성해서 주어진 수 만큼 초기화 하는 로직
@@ -57,6 +58,8 @@ public class ScrollingObjController : MonoBehaviour
         {
             scrollingPool[i].AddLocalPosition(scrollingSpeed * Time.deltaTime * (-1), 0f, 0f);
         }   // 배경 왼쪽 이동
+
+        RepositionFirstObj();
         
     }   // Update()
 
